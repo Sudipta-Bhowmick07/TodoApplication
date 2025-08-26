@@ -5,19 +5,21 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   // Fetch tasks on load
   useEffect(() => {
-    fetch("http://localhost:5000/tasks")
+    fetch(`${API_URL}/tasks`)
       .then((res) => res.json())
       .then((data) => setTasks(data))
       .catch((err) => console.error("Error fetching tasks:", err));
-  }, []);
+  }, [API_URL]);
 
   // Add a task
   const addTask = () => {
     if (!newTask.trim()) return;
 
-    fetch("http://localhost:5000/tasks", {
+    fetch(`${API_URL}/tasks`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTask }),
@@ -32,7 +34,7 @@ function App() {
 
   // Toggle completed
   const toggleTask = (id, currentStatus) => {
-    fetch(`http://localhost:5000/tasks/${id}`, {
+    fetch(`${API_URL}/tasks/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ completed: !currentStatus }),
@@ -46,7 +48,7 @@ function App() {
 
   // Delete task
   const deleteTask = (id) => {
-    fetch(`http://localhost:5000/tasks/${id}`, {
+    fetch(`${API_URL}/tasks/${id}`, {
       method: "DELETE",
     })
       .then(() => {
